@@ -1,0 +1,12 @@
+From: "Second-Hand security team" <security@secondhand.example.org>
+To: "All users" <users@secondhand.example.org>
+Date: Thu, 12 Mar 2026 23:59:00
+Subject: Strengthen security
+
+Dear users,
+Due to the continuous cyberattacks against our company, we are strengthening the security of our user accounts.
+Because of that, we are now requesting our users to change their password *every week*. Our system will also automatically check that the new password is different from the one that was in use the previous week.
+We are also removing all restrictions on the maximum length and characters that you can enter in your password, so that you can create strong passwords and keep the hackers at bay!
+
+Our warmest regards,
+The security team at Second-Hand Shop

@@ -14,7 +14,7 @@ except StopIteration:
 print(f"Program found: {SCRIPT}")
 
 # You can change this to whatever directory contains all the levels on your machine
-LEVELS_DIRECTORY = path_to_data = Path.cwd() / "levels"
+LEVELS_DIRECTORY = path_to_data = Path(__file__).parent / "levels"
 
 
 class TestLevels(unittest.TestCase):

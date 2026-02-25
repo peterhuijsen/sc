@@ -8,23 +8,20 @@ with open(input_file, "r") as f:
     lines = [l.strip().split(",") for l in f.readlines()]
 
 def calculate_combinations(characters: list[str], previous_combinations: list[str]) -> list[str]:
-    return [previous + character for previous in previous_combinations for character in characters] \
-        if len(previous_combinations) > 0 \
-        else characters
-    
+    return [previous + character for previous in previous_combinations for character in characters] 
 
 def simple_crack_hashes(hashes: list[Any], characters: list[str], lengths: tuple[int, int], check_func: Callable[[list[Any], str], list[tuple[str, str]]]) -> list[tuple[str, str]]:
     found: list[tuple[str, str]] = []
-    combinations = []
+    combinations = [""]
 
     # check whether the last generated combinations already hit the maximum length of the passwords
-    while len(combinations[-1] if len(combinations) > 0 else []) < lengths[1]:
+    while len(combinations[-1]) < lengths[1]:
         combinations = calculate_combinations(characters, combinations)
 
+        if len(combinations[0]) < lengths[0]:
+            continue
+        
         for combination in combinations:
-            # Skip any combinations which aren't checked.
-            if len(combination) < lengths[0]:
-                continue
 
             found.extend(check_func(hashes, combination))
             

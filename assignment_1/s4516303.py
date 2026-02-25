@@ -7,7 +7,7 @@ level, input_file = int(sys.argv[1]), sys.argv[2]
 with open(input_file, "r") as f:
     lines = [l.strip().split(",") for l in f.readlines()]
 
-def calculate_combinations(characters: list[str], previous_combinations: list[str], depth_remaining: int = 1) -> list[str]:
+def calculate_combinations(characters: list[str], previous_combinations: list[str]) -> list[str]:
     return [previous + character for previous in previous_combinations for character in characters] \
         if len(previous_combinations) > 0 \
         else characters

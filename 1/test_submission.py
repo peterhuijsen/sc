@@ -27,7 +27,7 @@ class TestLevels(unittest.TestCase):
 		"""
 		# We run the student program in a subprocess, capturing the output
 		level_input = Path(LEVELS_DIRECTORY) / f"level{level_number}" / f"level{level_number}.csv"
-		subprocess_result = subprocess.run(["python3", str(SCRIPT), str(level_number), str(level_input.absolute())], capture_output = True, timeout = 60 * 5, check = True)
+		subprocess_result = subprocess.run([sys.executable, str(SCRIPT), str(level_number), str(level_input.absolute())], capture_output = True, timeout = 60 * 5, check = True)
 		run_output = subprocess_result.stdout.decode("utf8")
 
 		# We collect the candidate passwords from the program's output

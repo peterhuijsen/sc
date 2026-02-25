@@ -6,14 +6,11 @@ level, input_file = int(sys.argv[1]), sys.argv[2]
 with open(input_file, "r") as f:
     lines = [l.strip().split(",") for l in f.readlines()]
 
-def calculate_combinations(characters, previous_combinations, depth_remaining=1):
-    if depth_remaining <= 0:
-        return []
-
-    next_combinations = [previous + character for previous in previous_combinations for character in characters] \
+def calculate_combinations(characters, previous_combinations):
+    # We append each character for each previous combination.
+    return [previous + character for previous in previous_combinations for character in characters] \
         if len(previous_combinations) > 0 \
         else characters
-    return [*next_combinations, *calculate_combinations(characters, next_combinations, depth_remaining - len(characters[0]))]
     
 def simple_crack_hashes(hashes, characters, lengths, check_func):
     found = []

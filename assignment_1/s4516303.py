@@ -1,7 +1,7 @@
 import sys
 import string
 from hashlib import sha256
-from typing import Callable, Any, Generator, Iterable
+from typing import Callable, Any, Iterable
 
 level, input_file = int(sys.argv[1]), sys.argv[2]
 with open(input_file, "r") as f:
@@ -57,7 +57,8 @@ def salted_check_function(combination: str, input: list[tuple[str, str]]) -> Ite
 
         yield (hash, combination)
 
-mutations = [*[str(c) for c in range(10)], *string.ascii_letters]
+# Only digits also works for the example input!
+mutations = [*[str(c) for c in range(10)], string.ascii_letters, string.punctuation, string.whitespace]
 def mutation_check_function(combination: str, input: list[tuple[str, str]]) -> Iterable[tuple[str, str]]:
     attempt_previous_hash = sha256(combination.encode("utf-8")).hexdigest()
     for previous_hash, hash in input:

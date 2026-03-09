@@ -16,7 +16,7 @@ def log_matches(csv: list[list[str]], matches: list[tuple[str, str]], match_inde
 def calculate_combinations(characters: list[str], previous_combinations: list[str]) -> list[str]:
     return [previous + character for previous in previous_combinations for character in characters] 
 
-def simple_crack_hashes(
+def crack_hashes(
     input: list[Any], 
     characters: list[str], 
     lengths: tuple[int, int], 
@@ -77,7 +77,7 @@ def mutation_check_function(combination: str, input: list[tuple[str, str]]) -> I
 def level_1(csv: list[list[str]]) -> None:
     characters = [str(c) for c in range(10)]
     hashes = [row[1] for row in csv[1:]]
-    matches = simple_crack_hashes(
+    matches = crack_hashes(
         input=hashes, 
         characters=characters, 
         lengths=(4, 4),
@@ -90,7 +90,7 @@ def level_1(csv: list[list[str]]) -> None:
 def level_2(csv: list[list[str]]) -> None:
     characters = list[str](string.ascii_lowercase)
     hashes = [row[1] for row in csv[1:]]
-    matches = simple_crack_hashes(
+    matches = crack_hashes(
         input=hashes, 
         characters=characters, 
         lengths=(3, 5),
@@ -102,7 +102,7 @@ def level_2(csv: list[list[str]]) -> None:
 def level_3(csv: list[list[str]]) -> None:
     characters = list[str](string.ascii_lowercase)
     hash_salts = [(row[2], row[1]) for row in csv[1:]]
-    matches = simple_crack_hashes(
+    matches = crack_hashes(
         input=hash_salts, 
         characters=characters, 
         lengths=(3, 5),
@@ -114,7 +114,7 @@ def level_3(csv: list[list[str]]) -> None:
 def level_4(csv: list[list[str]]) -> None:
     characters = ["Margrave", "Whalebones", "Muskroots", "Atmometry", "Fourdriniers", "Porrecting", "Pericynthions", "Misfeasors", "Histiology", "Parochin", "Knockwurst", "Rubeolar", "Ensampling", "Plugless", "Cornerback", "Grapplers", "Coronachs", "Waughted", "Catarhine", "Skidpans", "Fleshmongers", "Provenance", "Trollied", "Selaginellas", "Creepages", "Humectated", "Cercopids", "Unproclaimed", "Bourtrees", "Thalamic", "Inerasably", "Panspermatist", "Reheatings", "Changeless", "Karabiners", "Nonexempt", "Hypoplasties", "Shirtier", "Stablenesses", "Eavesdrop", "Recommittal", "Parrotier", "Obtemperates", "Preprimaries", "Freebooting", "Biggetiest", "Reaffixing", "Alcoholisms", "Cartwheels", "Underreported"]
     hashes = [row[1] for row in csv[1:]]
-    matches = simple_crack_hashes(
+    matches = crack_hashes(
         input=hashes, 
         characters=characters, 
         lengths=(30, 50),
@@ -126,7 +126,7 @@ def level_4(csv: list[list[str]]) -> None:
 def level_5(csv: list[list[str]]) -> None:
     characters = list[str](string.ascii_lowercase)
     hashes = [(row[1], row[2]) for row in csv[1:]]
-    matches = simple_crack_hashes(
+    matches = crack_hashes(
         input=hashes, 
         characters=characters, 
         lengths=(3, 5),

